@@ -1,0 +1,106 @@
+.section-margin {
+    margin: 70px 0; }
+    @media (min-width: 1000px) {
+      .section-margin {
+        margin: 130px 0; } }
+    .section-margin--small {
+      margin: 35px 0; }
+      @media (min-width: 1000px) {
+        .section-margin--small {
+          margin: 65px 0; } }
+  
+  .section-padding {
+    padding: 60px 0; }
+    @media (min-width: 1000px) {
+      .section-padding {
+        padding: 130px 0; } }
+  
+  .bg-porcelain {
+    background: #f7f9f9; }
+  
+  .nice-select {
+    width: 100%;
+    height: 50px;
+    border-radius: 0;
+    border-color: #ECECEC;
+    color: #999999;
+    padding-top: 4px; }
+    .nice-select::after {
+      right: 16px; }
+    .nice-select .list {
+      min-width: 200px; }
+  
+  .pb-20px {
+    padding-bottom: 20px; }
+  
+  .pb-80px {
+    padding-bottom: 40px; }
+    @media (min-width: 1000px) {
+      .pb-80px {
+        padding-bottom: 80px; } }
+  
+  .mb-30px {
+    margin-bottom: 30px; }
+  
+  .py-80px {
+    padding-top: 80px;
+    padding-bottom: 80px; }
+  
+  @media (min-width: 1200px) {
+    .row > .gutters-19 {
+      padding-right: 9.5px;
+      padding-left: 9.5px; } }
+
+.section-intro__style {
+    margin-bottom: 14px; }
+
+    .testi-carousel .owl-stage-outer {
+        padding: 50px 0; }
+      
+      .testi-carousel .owl-item {
+        overflow: hidden; }
+      
+      .testi-carousel__item {
+        background: #f7f9f9;
+        padding: 30px 25px;
+        transition: all .3s ease; }
+        .testi-carousel__item .media-body p {
+          margin-bottom: 12px; }
+        .testi-carousel__item::after {
+          content: '';
+          width: 0;
+          height: 0;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          border-bottom: 15px solid #ffffff;
+          border-left: 500px solid rgba(255, 255, 255, 0.13);
+          /* Maintain smooth edge of triangle in FF */
+          -moz-transform: scale(0.9999); }
+        .testi-carousel__item:hover {
+          box-shadow: 0px 10px 20px 0px rgba(153, 153, 153, 0.2);
+          background: #fff; }
+      
+      .testi-carousel__img {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin-right: 20px; }
+      
+      .testi-carousel__intro h3 {
+        font-size: 24px;
+        font-weight: 400;
+        margin-bottom: 5px; }
+      
+      .testi-carousel__intro p {
+        font-size: 14px;
+        color: #999999; }
+      
+      .testi-carousel .owl-dots .owl-dot span {
+        background: #cacccf; }
+      
+      .testi-carousel .owl-dots .owl-dot.active span {
+        width: 12px;
+        height: 12px;
+        background: #cca772; }
+      
