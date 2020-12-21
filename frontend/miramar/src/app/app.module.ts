@@ -17,6 +17,7 @@ import { EventsComponent } from './events/events.component';
 import { DomainComponent } from './domain/domain.component';
 import { AvisclientComponent } from './avisclient/avisclient.component';
 import { GalleryComponent } from './gallery/gallery.component';
+import { OneblogComponent } from './oneblog/oneblog.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { GalleryComponent } from './gallery/gallery.component';
     DomainComponent,
     AvisclientComponent,
     GalleryComponent,
+    OneblogComponent,
   ],
   imports: [
     BrowserModule,

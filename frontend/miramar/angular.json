@@ -34,6 +34,7 @@
               "./src/assets/fonts/ionicons/css/ionicons.min.css",
               "./src/assets/fonts/fontawesome/css/font-awesome.min.css",
               "./node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
+              "./node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
               "./src/assets/css/style.css",
               "src/styles.scss"
             ],
@@ -49,7 +50,9 @@
               "./node_modules/jquery.stellar/jquery.stellar.js",
               "./src/assets/js/jquery.magnific-popup.min.js",
               "./src/assets/js/magnific-popup-options.js",
+              "./node_modules/moment/min/moment.min.js",
               "./node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
+              "./node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
               "./src/assets/js/main.js"
             ]
           },

@@ -221,7 +221,8 @@ export class MainstartService {
         }
       });
 
-      $('#arrival_date, #departure_date').datepicker({});
+      $('#arrival_date, #departure_date').datepicker({
+      });
     
       function initMap() {
         var uluru = {lat: -25.363, lng: 131.044};
@@ -243,7 +244,7 @@ export class MainstartService {
         });
       }
 
-      initMap();
+      // initMap();
       
 
     })(jQuery);

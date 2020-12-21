@@ -1,8 +1,8 @@
 <header role="banner">
      
-    <nav class="navbar navbar-expand-md navbar-dark bg-light">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" routerLink>LuxuryHotel</a>
+        <a class="navbar-brand" routerLink>MIRAMAR HOTEL</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -10,30 +10,29 @@
         <div class="collapse navbar-collapse navbar-light" id="navbarsExample05">
           <ul class="navbar-nav ml-auto pl-lg-5 pl-0">
             <li class="nav-item">
-              <a class="nav-link active" routerLink="">Home</a>
+              <a class="nav-link " routerLink="" routerLinkActive="active">Accueil</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" routerLink="/chambres" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Rooms</a>
+              <a class="nav-link dropdown-toggle" routerLinkActive="active" routerLink="/chambres" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chambres</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
-                <a class="dropdown-item" href="rooms.html">Room Videos</a>
-                <a class="dropdown-item" href="rooms.html">Presidential Room</a>
-                <a class="dropdown-item" href="rooms.html">Luxury Room</a>
-                <a class="dropdown-item" href="rooms.html">Deluxe Room</a>
+                <a class="dropdown-item" routerLink="/chambres">Vidéos des chambres</a>
+                <a class="dropdown-item" routerLink="/chambres">Chambre présidentielle</a>
+                <a class="dropdown-item" routerLink="/chambres">Salon VIP</a>
               </div>
 
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLink="/evenements">Blog</a>
+              <a class="nav-link" routerLink="/evenements" routerLinkActive="active">Blog</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLink="apropos">About</a>
+              <a class="nav-link" routerLink="apropos" routerLinkActive="active">A Propos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLink="contactez-nous">Contact</a>
+              <a class="nav-link" routerLink="contactez-nous" routerLinkActive="active">Contact</a>
             </li>
 
              <li class="nav-item cta">
-              <a class="nav-link" routerLink="/reservation"><span>Book Now</span></a>
+              <a class="nav-link" routerLink="/reservation" routerLinkActive="active"><span>Reserver</span></a>
             </li>
           </ul>
           

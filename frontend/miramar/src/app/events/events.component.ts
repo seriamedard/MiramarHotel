@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { MainstartService } from '../services/mainstart.service';
 
 @Component({
@@ -8,7 +9,10 @@ import { MainstartService } from '../services/mainstart.service';
 })
 export class EventsComponent implements OnInit {
 
-  constructor(private startService: MainstartService) { }
+  constructor(private startService: MainstartService,
+              private title: Title) {
+    this.title.setTitle("Miramar - Evenements")
+    }
 
   ngOnInit(): void {
     this.startService.onStarted();
