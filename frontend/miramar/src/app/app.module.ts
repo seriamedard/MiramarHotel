@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,6 +20,19 @@ import { DomainComponent } from './domain/domain.component';
 import { AvisclientComponent } from './avisclient/avisclient.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { OneblogComponent } from './oneblog/oneblog.component';
+import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { ToastrModule } from 'ngx-toastr';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { from } from 'rxjs';
+
+
 
 @NgModule({
   declarations: [
@@ -38,11 +53,32 @@ import { OneblogComponent } from './oneblog/oneblog.component';
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
-    FontAwesomeModule
+
+    NgxIntlTelInputModule,
+    NgxMatNativeDateModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+
+    MatDatepickerModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatProgressSpinnerModule,
+
+    FormsModule,
+    ReactiveFormsModule,
+
+    FontAwesomeModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    HttpClientModule
+
   ],
   providers: [
-    MainstartService
+    MainstartService,
+  
   ],
   bootstrap: [AppComponent]
 })

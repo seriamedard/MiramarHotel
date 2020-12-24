@@ -1,0 +1,32 @@
+#timepicker1,
+#timepicker2,
+.datetimepicker {
+    .form-control{
+        background-color: #fff;
+    }
+}
+
+.date {
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.config-wrapper {
+    margin-bottom: 15px;
+    .label {
+      font-weight: bold;
+      margin-right: 15px;
+    }
+    .mat-radio-button ~ .mat-radio-button {
+      margin-left: 16px;
+    }
+
+    &_step {
+      .mat-form-field {
+        margin-right: 20px;
+        width: 100px;
+      }
+    }
+    
+  }

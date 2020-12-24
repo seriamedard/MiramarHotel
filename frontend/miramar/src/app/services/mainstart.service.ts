@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-
+import { from } from 'rxjs';
+import { intlTelInput } from 'intl-tel-input';
+declare var Pidie: any;
 declare var jQuery: any;
 declare var $: any;
 declare var google: any; 
@@ -18,6 +20,7 @@ export class MainstartService {
 
       'use strict';
     
+      
       // bootstrap dropdown hover
     
       // loader
@@ -221,8 +224,36 @@ export class MainstartService {
         }
       });
 
-      $('#arrival_date, #departure_date').datepicker({
-      });
+      
+      var defaults = {
+        showClear: true,
+        showClose: true,
+        allowInputToggle: true,
+        useCurrent: false,
+        ignoreReadonly: true,
+        minDate: new Date(),
+        toolbarPlacement: 'top',
+        locale: 'nl',
+        icons: {
+          time: 'fa fa-clock-o',
+          date: 'fa fa-calendar',
+          up: 'fa fa-angle-up',
+          down: 'fa fa-angle-down',
+          previous: 'fa fa-angle-left',
+          next: 'fa fa-angle-right',
+          today: 'fa fa-dot-circle-o',
+          clear: 'fa fa-trash',
+          close: 'fa fa-times'
+        }
+      };
+
+      (function() {
+        var optionsDatetime = $.extend({}, defaults, {format:'DD-MM-YYYY HH:mm'});
+        var optionsTime = $.extend({}, defaults, {format:'HH:mm'});
+        var optionsDate = $.extend({}, defaults, {format:'DD-MM-YYYY'});
+        $('#arrival_date, #departure_date').datetimepicker(optionsDatetime);
+        // $('#timepicker1, #timepicker2').datetimepicker(optionsTime);
+      })();
     
       function initMap() {
         var uluru = {lat: -25.363, lng: 131.044};

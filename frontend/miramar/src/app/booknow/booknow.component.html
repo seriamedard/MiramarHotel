@@ -24,19 +24,21 @@
                     <div class="col-sm-6 form-group">
                         
                         <label for="">Date d'Arrivée</label>
-                        <div style="position: relative;">
+                        <div style="position: relative;" class="datetimepicker">
                           <span class="fa fa-calendar icon" style="position: absolute; right: 10px; top: 10px;"></span>
-                          <input type='text' class="form-control" id='arrival_date' />
+                          <input type='text' class="form-control" id='arrival_date' readonly/>
                         </div>
-                    </div>
-
+                    </div> 
+                    
+        
                     <div class="col-sm-6 form-group">
                         
                         <label for="">Date de Depart</label>
-                        <div style="position: relative;">
+                        <div style="position: relative;" class="datetimepicker">
                           <span class="fa fa-calendar icon" style="position: absolute; right: 10px; top: 10px;"></span>
-                          <input type='text' class="form-control" id='departure_date' />
+                          <input type='text' class="form-control " id='departure_date' readonly />
                         </div>
+                        
                     </div>
                     
                 </div>
@@ -73,10 +75,24 @@
                 </div>
                 <div class="row">
                   <div class="col-md-12 form-group">
-                    <label for="phone">Phone</label>
-                    <input type="tel" id="phone" class="form-control ">
+                    <label for="phone">Phone</label><br>
+                    <ngx-intl-tel-input 
+                [cssClass]="'custom'"
+                [preferredCountries]="preferredCountries"
+                [enableAutoCountrySelect]="true"
+                [enablePlaceholder]="true"
+                [searchCountryFlag]="true"
+                [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                [selectFirstCountry]="false"
+                [selectedCountryISO]="CountryISO.Chad"
+                [tooltipField]="TooltipLabel.Name"
+                [phoneValidation]="true"
+                [separateDialCode]="separateDialCode"
+                name="phone">
+              </ngx-intl-tel-input>
                   </div>
                 </div>
+                
                 <div class="row">
                   <div class="col-md-12 form-group">
                     <label for="message">Ecrire une Note (optionnel)</label>

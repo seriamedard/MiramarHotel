@@ -29,7 +29,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
+    'phonenumber_field',
     'managemiramar',
     'ckeditor',
     'ckeditor_uploader',
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -113,6 +116,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+# CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:4200'
+]
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -124,4 +132,7 @@ STATICFILES_DIRS = (
 
 MEDIA_URL ='/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'images/')
+
 CKEDITOR_UPLOAD_PATH = "images/media/"
+
+#INSTALLED_APPS = list(INSTALLED_APPS) + ['dddp']	
