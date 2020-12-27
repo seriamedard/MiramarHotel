@@ -1,7 +1,9 @@
+import os
 from django.db import models
 from django.db.models.fields import PositiveIntegerField
 from ckeditor.fields import RichTextField
 from phonenumber_field.modelfields import PhoneNumberField
+import twilio.rest as tr
 
 # Table of Categories
 class Category(models.Model):
@@ -16,7 +18,9 @@ class Category(models.Model):
 
 # Rename photo
 def rename(instance, nom_fchier):
-        return "{}_{}".format(instance.id, nom_fchier)
+    _,ext = os.path.splitext(f"{nom_fchier}")
+
+    return "{}{}".format(instance.id,ext)
 
 
 # Table of rooms
@@ -30,7 +34,7 @@ class Room(models.Model):
     description = RichTextField()
     available = models.BooleanField("Disponible",default=True)
     promo = models.BooleanField(default=False)
-    category = models.ForeignKey(Category, related_name='categorie', on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name='categorie', on_delete=models.SET_NULL, null=True)
 
     class Meta:
         verbose_name = 'Chambre'
@@ -56,7 +60,7 @@ class Room(models.Model):
 class Personne(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField("Nom",max_length=50, null=False)
-    email = models.EmailField(max_length=254, blank=True, null=True)
+    email = models.EmailField(max_length=254, blank=True, null=True, unique=True)
     phone = PhoneNumberField("Telephone",blank=True, null=True)
 
     class Meta:
@@ -84,16 +88,31 @@ class Client(Personne):
 
     def __str__(self):
         return self.name or f"{self.name} {self.last_name}"
+
+    def save(self, *args, **kwargs) :
+        account_sid = 'AC4cab9657cebdd1d12791c020e21519d7'
+        auth_token = 'e4ad6dede5c04c086b7fc2e87bf93a0e'
+        client = tr.Client(account_sid, auth_token)
+
+        message = client.messages \
+                        .create(
+                            body=f"succes, client: {self.name}",
+                            from_='+18705282401',
+                            to='+221774189088'
+                        )
+
+        print(message.sid)
+        return super().save(*args, **kwargs)
     
 
 class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    arrival_date_hour = models.DateTimeField("Temps d'arrivée",auto_now_add=False)
-    departure_date_hour = models.DateTimeField("Temps de départ",auto_now_add=False)
-    note =models.TextField("Message",max_length=300)
+    arrival_date_hour = models.DateTimeField("Temps d'arrivée",auto_now_add=False, null=True)
+    departure_date_hour = models.DateTimeField("Temps de départ",auto_now_add=False, null=True)
+    note =models.TextField("Message",max_length=300, blank=True, default="")
     termined = models.BooleanField("Terminé", default=False)
     guests = PositiveIntegerField("Occupants",default=1)
-    client = models.ForeignKey(Client, models.CASCADE)
+    client = models.ForeignKey(Client, models.SET_NULL, null=True)
     chambre = models.ManyToManyField(Room)
 
     class Meta:

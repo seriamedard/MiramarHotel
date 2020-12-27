@@ -6,7 +6,7 @@ class CategorySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Category
-        fields = ['id','created_at', 'name']
+        fields = ['url','id','created_at', 'name']
 
     def create(self, validated_data):
         """
@@ -26,7 +26,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
-        fields = ['id','created_at','name',
+        fields = ['url','id','created_at','name',
                     'photo','max_places',
                     'surface','price','description',
                     'available','promo','category']
@@ -54,7 +54,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id','username']
+        fields = ['url','id','username']
 
 
 class ContactUsSerializer(serializers.ModelSerializer):
@@ -107,16 +107,35 @@ class ClientSerializer(serializers.ModelSerializer):
 
 
 class BookingSerializer(serializers.ModelSerializer):
-    
+    client = serializers.HyperlinkedRelatedField(
+        many=False,
+        read_only=False,
+        view_name='client-detail',
+        queryset = Client.objects.all()
+    )
+    chambre = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=False,
+        view_name='room-detail',
+        queryset = Room.objects.all()
+    )
     class Meta:
         model = Booking
-        fields = '__all__'
+        fields = ['url','arrival_date_hour',
+                    'departure_date_hour','note','termined',
+                    'guests','client','chambre'
+                    ]
 
     def create(self, validated_data):
         """
         Create an return a new Category instance
         """
-        return Booking.objects.create(**validated_data)
+        chambre_data = validated_data.pop('chambre')
+        booking = Booking.objects.create(**validated_data)
+        for ch in chambre_data:
+            booking.chambre.add(ch)
+        #return Booking.objects.create(**validated_data)
+        return booking
 
     def update(self, instance, validated_data):
         """
@@ -128,7 +147,7 @@ class BookingSerializer(serializers.ModelSerializer):
         instance.termined = validated_data.get('termined')
         instance.guests = validated_data.get('guests')
         instance.client = validated_data.get('client')
-        instance.chambre = validated_data.get('chambre')
+        instance.chambre.add(validated_data.get('chambre'))
         instance.save()
         return instance
 

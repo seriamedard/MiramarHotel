@@ -64,32 +64,29 @@ class ContactUsList(generics.ListCreateAPIView):
 class ContactUsDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ContactUs.objects.all()
     serializer_class = ContactUsSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
 
 # List of Client
 class ClientList(generics.ListCreateAPIView):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 # Detail of client
 class ClientDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
 
 
 # List or create booking 
 class BookingListAndCreate(generics.ListCreateAPIView):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 # Detail of Booking
 class BookingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
    
 
