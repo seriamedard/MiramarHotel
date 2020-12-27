@@ -30,7 +30,9 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { from } from 'rxjs';
+import { SafePipe } from './pipe/safe.pipe';
+import { SingleComponent } from './booknow/single/single.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
@@ -50,6 +52,8 @@ import { from } from 'rxjs';
     AvisclientComponent,
     GalleryComponent,
     OneblogComponent,
+    SafePipe,
+    SingleComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +64,7 @@ import { from } from 'rxjs';
     NgxMatNativeDateModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
+    NgxPaginationModule,
 
     MatDatepickerModule,
     MatInputModule,

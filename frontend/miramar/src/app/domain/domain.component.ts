@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { MainstartService } from '../services/mainstart.service';
 
 @Component({
   selector: 'app-domain',
@@ -8,9 +9,10 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 })
 export class DomainComponent implements OnInit {
   faCoffee = faCoffee;
-  constructor() { }
+  constructor(private startService: MainstartService) { }
 
   ngOnInit(): void {
+
   }
 
 }

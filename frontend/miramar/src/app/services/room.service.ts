@@ -40,11 +40,30 @@ export class RoomService {
             err => reject(err)
           )
     })
-
-  
-    
+  }
+  getRoomPromo() {
+      var roomFilter;
+      function getRandomInt(max) {
+        return Math.floor(Math.random()*Math.floor(max))
+      }
+      return new Promise<any>((resolve, reject) => {
+        this.getAllRooms()
+        .then(rooms => {
+          roomFilter = rooms.filter( el => el.promo == true)
+          var aleanum : number;
+          try {
+            aleanum = getRandomInt(roomFilter.length);
+            resolve(roomFilter[aleanum])
+            
+          } catch (error) {
+            
+          }
+         
+        }).catch(err => {})
+      })
+      
   }
 
 
-
 }
+

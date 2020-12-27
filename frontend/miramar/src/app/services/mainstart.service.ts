@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as moment from 'moment';
 import { from } from 'rxjs';
 import { intlTelInput } from 'intl-tel-input';
 declare var Pidie: any;
@@ -17,9 +18,6 @@ export class MainstartService {
 
   public onStarted() {
     (function($) {
-
-      'use strict';
-    
       
       // bootstrap dropdown hover
     
@@ -228,12 +226,12 @@ export class MainstartService {
       var defaults = {
         showClear: true,
         showClose: true,
-        allowInputToggle: true,
-        useCurrent: false,
+        useCurrent: true,
+        keepOpen: true,
         ignoreReadonly: true,
         minDate: new Date(),
         toolbarPlacement: 'top',
-        locale: 'nl',
+        locale: moment.locale(),
         icons: {
           time: 'fa fa-clock-o',
           date: 'fa fa-calendar',
@@ -244,15 +242,15 @@ export class MainstartService {
           today: 'fa fa-dot-circle-o',
           clear: 'fa fa-trash',
           close: 'fa fa-times'
-        }
+        },
       };
 
       (function() {
-        var optionsDatetime = $.extend({}, defaults, {format:'DD-MM-YYYY HH:mm'});
+        var optionsDatetime = $.extend({}, defaults, {format:'YYYY-MM-DDThh:mm'});
         var optionsTime = $.extend({}, defaults, {format:'HH:mm'});
         var optionsDate = $.extend({}, defaults, {format:'DD-MM-YYYY'});
         $('#arrival_date, #departure_date').datetimepicker(optionsDatetime);
-        // $('#timepicker1, #timepicker2').datetimepicker(optionsTime);
+        // $('#arrival_date, #departure_date').datetimepicker(optionsTime);
       })();
     
       function initMap() {

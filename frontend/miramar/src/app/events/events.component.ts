@@ -15,7 +15,6 @@ export class EventsComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    this.startService.onStarted();
   }
 
 }

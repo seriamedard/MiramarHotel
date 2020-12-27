@@ -1,25 +1,28 @@
-import { Component, OnInit} from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { CountryISO, SearchCountryField, TooltipLabel } from 'ngx-intl-tel-input';
-import { MainstartService } from '../services/mainstart.service';
-import * as moment from 'moment';
+import { Route } from '@angular/compiler/src/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ClientService } from '../services/client.service';
-import { RoomService } from '../services/room.service';
-import { BookingService } from '../services/booking.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { BookingService } from 'src/app/services/booking.service';
+import { ClientService } from 'src/app/services/client.service';
+import { RoomService } from 'src/app/services/room.service';
 import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
-import { CategoryService } from '../services/category.service';
+import { CountryISO, SearchCountryField, TooltipLabel } from 'ngx-intl-tel-input';
+import { CategoryService } from 'src/app/services/category.service';
+import { map } from 'rxjs-compat/operator/map';
+import { tap } from 'rxjs/operators';
+import { data } from 'jquery';
+import { MainstartService } from 'src/app/services/mainstart.service';
 
 const host = environment.host;
 declare var $:any;
+
 @Component({
-  selector: 'app-booknow',
-  templateUrl: './booknow.component.html',
-  styleUrls: ['./booknow.component.scss']
+  selector: 'app-single',
+  templateUrl: './single.component.html',
+  styleUrls: ['./single.component.scss']
 })
-export class BooknowComponent implements OnInit {
+export class SingleComponent implements OnInit {
 
   myPhone = "phone"
   separateDialCode = true;
@@ -28,42 +31,35 @@ export class BooknowComponent implements OnInit {
   CountryISO = CountryISO;
   preferredCountries: CountryISO[] = [CountryISO.Chad, CountryISO.Senegal];
 
-  clients : any[] = [];
-  rooms: any[] = [];
-  categories: any;
+  clients: any[];
+  errorMessage :any;
+  room: any = {};
   roomPromo: any;
-  errorMessage : any;
-
-  constructor(private startService: MainstartService,
-              private title: Title,
-              private clientService: ClientService,
-              private roomService: RoomService,
+  categories: any;
+  constructor(private clientService: ClientService,
               private bookingService: BookingService,
+              private roomService: RoomService,
               private catService: CategoryService,
-              private toast : ToastrService,
-              private router: Router) {
-      this.title.setTitle("Miramar - Reservation"); 
-
-    }
+              private router: Router,
+              private route: ActivatedRoute,
+              private toast: ToastrService,
+              private startService: MainstartService) { }
 
   ngOnInit(): void {
-    this.clientService.getAllClient()
-        .then((res:any) => {
-          this.clients = res;
-    });
+    this.startService.onStarted();
+    var id;
+    id=parseInt(this.route.snapshot.params['id'],10)
     
-    this.roomService.getAllRooms()
-    .then(res => {
-      this.rooms = res;
-    });
-
+    this.roomService.getRoomDetail(+id)
+      .then(res => {
+        this.room=res
+      }).catch(err=> console.log(err))
     this.roomService.getRoomPromo()
       .then(res => this.roomPromo=res)
     this.getCategories();
 
   }
 
-  
   getCategories() {
     this.catService.getListCategory()
       .then(res => {
@@ -80,15 +76,16 @@ export class BooknowComponent implements OnInit {
     const name = form.value['name'];
     const phone = form.value['phone'].internationalNumber;
     const email = form.value['email'];
-    const idchambre =parseInt(form.value['chambre'],10);
-    var client: any;
-    client = {};
+    const idchambre =this.room.id;
     var booking :any = {};
       booking.arrival_date_hour = arrival_date_hour;
       booking.departure_date_hour = departure_date_hour;
       booking.note = note;
       booking.guests = guests;
       booking.chambre = [host + '/rooms/' + idchambre + '/']
+
+    var client: any;
+    client = {};
     // Filter by email
     var create= true;
 
@@ -113,7 +110,7 @@ export class BooknowComponent implements OnInit {
           this.clientService.updateClient(client.id,client)
               .then(res => {
                 client = res
-                this.bookingService.saveBooking(booking, client);
+                this.bookingService.saveBooking(booking,client);
               }).catch(err => {
                 this.errorMessage = $.extend({}, this.errorMessage, err.error);
                 // console.log(this.errorMessage);
@@ -140,11 +137,35 @@ export class BooknowComponent implements OnInit {
       this.clientService.createNewClient(client)
         .then(res => {
           client = res;
-          this.bookingService.saveBooking(booking,client);
+          console.log(res)
+          this.bookingService.saveBooking(booking, client);
         }).catch(err => {
           this.errorMessage = $.extend({}, this.errorMessage, err.error);
         })
     }
+
+    // (async () => {
+    //   var booking :any = {};
+    //   booking.arrival_date_hour = arrival_date_hour;
+    //   booking.departure_date_hour = departure_date_hour;
+    //   booking.note = note;
+    //   booking.guests = guests;
+    //   booking.client =  await host + '/clients/'+ client.id +'/'
+    //   booking.chambre = [host + '/rooms/' + idchambre + '/']
+    //   this.bookingService.createNewBooking(booking)
+    //     .then(res => {
+    //       booking = res
+    //       this.toast.success("La reservation est bien réçu !","Confirmation")
+    //       this.router.navigate([""])
+    //     }).catch(err => {
+    //       this.toast.error("Une erreur est survenue, veuillez faire une nouvelle reservation !")
+    //       this.errorMessage = $.extend({}, this.errorMessage, err.error);
+          
+    //     })
+
+    // })();
   }
+
+  
 
 }

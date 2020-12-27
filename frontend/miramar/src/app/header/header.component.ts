@@ -8,10 +8,12 @@ import { MainstartService } from '../services/mainstart.service';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private startService: MainstartService) { }
+  constructor(private startService: MainstartService) {
+    
+   }
 
   ngOnInit(): void {
-    this.startService.onStarted()
+    this.startService.onStarted();
   }
 
 }

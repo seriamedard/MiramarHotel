@@ -47,19 +47,19 @@
                 <div class="row">
                   <div class="col-md-6 form-group">
                     <label for="room">Chambre</label>
-                    <p *ngIf="errorMessage && errorMessage.chambre" style="color: rgb(255, 145, 0); font-size:small">Choisir correctement !</p>
-                    <select data-bs-spy="scroll" name="chambre" id="room" class="form-control" title="Choisir une chambre" ngModel>
-                      <option value="" disabled>Choisir une chambre</option>
-                      <option *ngFor="let room of rooms; let i=index" [ngValue]="room.id" >{{room.name}} -({{room.price}}€)</option>
+                    <p *ngIf="errorMessage && errorMessage.chambre" style="color: rgb(255, 145, 0); font-size:small">{{errorMessage.chambre[0]}}</p>
+                    <select name="chambre" id="room" class="form-control" title="Choisir une chambre" ngModel>
+                      <option value="" disabled>selectionner la chambre</option>
+                      <option value="{{room.id}}">{{room.name}} - ({{room.price}}€)</option>
                     </select>
                   </div>
 
                   <div class="col-md-6 form-group" >
                     <label for="room">Personnes</label>
                     <p *ngIf="errorMessage && errorMessage.guests" style="color: rgb(255, 145, 0); font-size:small">{{errorMessage.guests[0]}}</p>
-                    <select data-bs-spy="scroll" name="guests" id="room" class="form-control" ngModel required >
-                      <option value="" disabled>Nombre de personnes</option>
-                      <option  value="1" selected>1 personne</option>
+                    <select name="guests" id="room" class="form-control" ngModel required>
+                      <option value="" disabled>pour combien ?</option>
+                      <option value="1" >1 personne</option>
                       <option value="2">2 personnes</option>
                       <option value="3">3 personnes</option>
                       <option value="4">4 personnes</option>
@@ -131,21 +131,20 @@
                   <span class="ion-ios-star"></span>
                   <span class="ion-ios-star"></span>
                 </span>
-                  
                 </span>
               </div>
             </figure>
             <div class="media-body">
               <h3 class="mt-0"><a href="#">{{roomPromo.name}}</a></h3>
               <ul class="room-specs">
-                <li><span class="ion-ios-people-outline"></span> {{roomPromo.guests}} personnes</li>
+                <li><span class="ion-ios-people-outline"></span> {{roomPromo.max_places}} personnes</li>
                 <li><span class="ion-ios-crop"></span> {{roomPromo.surface}} m <sup>2</sup></li>
               </ul>
               <p>Nulla vel metus scelerisque ante sollicitudin. Fusce condimentum nunc ac nisi vulputate fringilla. </p>
-              <p><a routerLink="/reservation/{{roomPromo.id}}" class="btn btn-primary btn-sm">Reserver pour {{roomPromo.price}}€</a></p>
+              <p><a href="/reservation/{{roomPromo.id}}" class="btn btn-primary btn-sm">Reserver pour {{roomPromo.price}}€</a></p>
             </div>
           </div>
-            </div>
+          </div>
       </div>
     </div>
   </section>

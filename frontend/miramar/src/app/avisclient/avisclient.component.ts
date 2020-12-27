@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MainstartService } from '../services/mainstart.service';
 
 @Component({
   selector: 'app-avisclient',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AvisclientComponent implements OnInit {
 
-  constructor() { }
+  constructor(private startService: MainstartService) { }
 
   ngOnInit(): void {
   }

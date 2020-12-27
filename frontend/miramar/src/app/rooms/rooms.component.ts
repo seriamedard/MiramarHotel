@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { environment } from 'src/environments/environment';
 import { CategoryService } from '../services/category.service';
+import { MainstartService } from '../services/mainstart.service';
 import { RoomService } from '../services/room.service';
 
 
@@ -16,8 +16,9 @@ export class RoomsComponent implements OnInit {
   name: "";
   categories: any[];
   loading : boolean;
-
+  p:number = 1;
   constructor(private title: Title,
+              private startService: MainstartService,
               private roomService: RoomService,
               private catService: CategoryService) {
     this.title.setTitle("Miramar - Chambres")
@@ -25,6 +26,7 @@ export class RoomsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
+    this.startService.onStarted();
     this.getAllRooms();
     this.getCategories();
   }
@@ -40,8 +42,7 @@ export class RoomsComponent implements OnInit {
   getCategories() {
     this.catService.getListCategory()
       .then(res => {
-        console.log(res)
         this.categories = res;
-      }).catch(err => console.log(err))
+      }).catch(err => {})
   }
 }
