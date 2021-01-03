@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 
@@ -10,15 +11,22 @@ var host = environment.host
 })
 export class ClientService {
 
+  ClientSubject = new Subject<any[]>();
+  clients: any[] = [] 
+
   constructor(private httpClient: HttpClient) { 
 
   }
 
+  emitNextClient() {
+    this.ClientSubject.next(this.clients)
+  }
   getAllClient() {
-    return new Promise((resolve, reject) => {
-      this.httpClient.get(host +'/clients/')
-        .subscribe(res => resolve(res), err => reject(err))
-    })
+    this.httpClient.get(host +'/clients/')
+      .subscribe((res:any) => {
+        this.clients =  res;
+        this.emitNextClient();
+      }, err => {})
   }
 
   createNewClient(newclient:any) {

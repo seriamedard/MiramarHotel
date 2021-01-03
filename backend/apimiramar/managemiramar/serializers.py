@@ -23,6 +23,7 @@ class CategorySerializer(serializers.ModelSerializer):
         return instance
 
 
+    
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room

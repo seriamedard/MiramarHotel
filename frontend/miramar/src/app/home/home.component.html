@@ -50,11 +50,13 @@
             <figure>
               <img src="{{roomPromo.photo}}" alt="{{roomPromo.title}}" class="img-fluid">
               <div class="overlap-text">
-                <span >
-                  EN VEDETTE  
+                <span *ngFor="let cat of categories">
+                  <span *ngIf="cat.id === roomPromo.category">
+                    {{ cat.name }}
+                    <span class="ion-ios-star"></span>
                   <span class="ion-ios-star"></span>
                   <span class="ion-ios-star"></span>
-                  <span class="ion-ios-star"></span>
+                </span>
                 </span>
               </div>
             </figure>
@@ -65,7 +67,7 @@
                 <li><span class="ion-ios-crop"></span> {{roomPromo.surface}} m <sup>2</sup></li>
               </ul>
               <p [innerHTML]="roomPromo.description | safe: 'html'"></p>
-              <p><a href="/reservation/{{roomPromo.id}}" class="btn btn-primary btn-sm">Reserver pour {{roomPromo.price}}€</a></p>
+              <p><a routerLink="/reservation/{{roomPromo.id}}" class="btn btn-primary btn-sm">Reserver pour {{roomPromo.price}}€</a></p>
             </div>
           </div>
         </div>
@@ -81,11 +83,13 @@
           <a *ngFor="let room of rooms" href="" class="media d-none d-md-block room bg first-room" style="background-image: url({{room.photo}}); ">
             <!-- <figure> -->
               <div class="overlap-text">
-                <span>
-                  Chambre
+                <span *ngFor="let cat of categories">
+                  <span *ngIf="cat.id === room.category">
+                    {{ cat.name }}
+                    <span class="ion-ios-star"></span>
                   <span class="ion-ios-star"></span>
                   <span class="ion-ios-star"></span>
-                  <span class="ion-ios-star"></span>
+                </span>
                 </span>
                 <span class="pricing-from">
                   De {{room.price}}€

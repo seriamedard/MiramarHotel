@@ -90,13 +90,16 @@
                 [cssClass]="'custom'"
                 [preferredCountries]="preferredCountries"
                 [enableAutoCountrySelect]="true"
+                [selectedCountryISO]="CountryCode"
                 [enablePlaceholder]="true"
                 [searchCountryFlag]="true"
                 [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
                 [selectFirstCountry]="false"
-                [selectedCountryISO]="CountryISO.Chad"
+                
                 [tooltipField]="TooltipLabel.Name"
                 [phoneValidation]="true"
+                initialCountry="auto"
+                geoIpLookup="geoIp()"
                 [separateDialCode]="separateDialCode"
                 name="phone" ngModel required>
               </ngx-intl-tel-input>
@@ -113,6 +116,9 @@
                 <div class="row">
                   <div class="col-md-6 form-group">
                     <input type="submit" value="Je Reserve" class="btn btn-primary" [disabled]="f.invalid">
+                    <div [hidden]="!isLoad" class="spinner-border text-primary " role="status" style="margin-left:-1.5rem;margin-top:0.5rem;position:absolute">
+                      <span class="visually-hidden"></span>
+                    </div>
                   </div>
                 </div>
               </form>

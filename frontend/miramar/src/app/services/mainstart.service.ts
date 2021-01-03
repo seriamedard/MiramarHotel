@@ -179,7 +179,7 @@ export class MainstartService {
     
      
     
-      var contentWayPoint = function() {
+      /*var contentWayPoint = function() {
         var i = 0;
         $('.element-animate').waypoint( function( direction ) {
     
@@ -212,8 +212,8 @@ export class MainstartService {
           }
     
         } , { offset: '95%' } );
-      };
-      contentWayPoint();
+      };*/
+      // contentWayPoint();
       // Gallery
       $('.img-gal').magnificPopup({
         type: 'image',

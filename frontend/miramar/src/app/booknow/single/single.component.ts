@@ -1,5 +1,5 @@
 import { Route } from '@angular/compiler/src/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,8 @@ import { map } from 'rxjs-compat/operator/map';
 import { tap } from 'rxjs/operators';
 import { data } from 'jquery';
 import { MainstartService } from 'src/app/services/mainstart.service';
+import { ReloadService } from 'src/app/services/reload.service';
+import { Subscription } from 'rxjs';
 
 const host = environment.host;
 declare var $:any;
@@ -22,7 +24,7 @@ declare var $:any;
   templateUrl: './single.component.html',
   styleUrls: ['./single.component.scss']
 })
-export class SingleComponent implements OnInit {
+export class SingleComponent implements OnInit, OnDestroy {
 
   myPhone = "phone"
   separateDialCode = true;
@@ -30,12 +32,18 @@ export class SingleComponent implements OnInit {
 	TooltipLabel = TooltipLabel;
   CountryISO = CountryISO;
   preferredCountries: CountryISO[] = [CountryISO.Chad, CountryISO.Senegal];
+  CountryCode: string;
 
   clients: any[];
+  client$ : Subscription;
   errorMessage :any;
   room: any = {};
+  room$: Subscription;
   roomPromo: any;
   categories: any;
+  category$: Subscription;
+  isLoad = false;
+  isLoad$: Subscription;
   constructor(private clientService: ClientService,
               private bookingService: BookingService,
               private roomService: RoomService,
@@ -43,129 +51,72 @@ export class SingleComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private toast: ToastrService,
-              private startService: MainstartService) { }
+              private startService: MainstartService,
+              private reloadService: ReloadService) { }
 
   ngOnInit(): void {
+    this.roomService.getAllRooms();
+    this.catService.getListCategory();
+    this.geoIp();
+
+    this.isLoad$ = this.bookingService.isLoadSub
+        .subscribe(res => this.isLoad = res)
+
+    this.client$ = this.clientService.ClientSubject
+      .subscribe(res => {
+        this.clients = res
+      })
+
+    setTimeout(() => this.reloadService.reload(),100)
+
     this.startService.onStarted();
+
     var id;
     id=parseInt(this.route.snapshot.params['id'],10)
     
     this.roomService.getRoomDetail(+id)
       .then(res => {
         this.room=res
-      }).catch(err=> console.log(err))
+      }).catch(err=> {})
+
     this.roomService.getRoomPromo()
       .then(res => this.roomPromo=res)
+
     this.getCategories();
+    
+
+  }
+
+  async geoIp(){
+    this.reloadService.getIpInfo().subscribe(
+      (resp:any) => {
+        var countryCode = (resp && resp.country) ? resp.country : "us";
+        this.CountryCode = countryCode
+      }
+    )
 
   }
 
   getCategories() {
-    this.catService.getListCategory()
-      .then(res => {
+    this.category$ = this.catService.categorySubject
+      .subscribe(res => {
         this.categories = res;
-      }).catch(err => console.log(err))
+      })
   }
   
   onSubmitBook(form: NgForm) {
-
-    const arrival_date_hour = form.value['arrival_date_hour'];
-    const departure_date_hour = form.value['departure_date_hour']
-    const note = form.value['note'];
-    const guests = parseInt(form.value['guests'],10);
-    const name = form.value['name'];
-    const phone = form.value['phone'].internationalNumber;
-    const email = form.value['email'];
-    const idchambre =this.room.id;
-    var booking :any = {};
-      booking.arrival_date_hour = arrival_date_hour;
-      booking.departure_date_hour = departure_date_hour;
-      booking.note = note;
-      booking.guests = guests;
-      booking.chambre = [host + '/rooms/' + idchambre + '/']
-
-    var client: any;
-    client = {};
-    // Filter by email
-    var create= true;
-
-    //reload clients
-    this.clientService.getAllClient()
-        .then((res:any) => {
-          this.clients = res;
-    });
-
-    if (this.clients ) {
-      this.clients.forEach(el => {
-        if (el.email === email) {
-          create = false;
-          client = el;
-          client = {
-            ...el,
-            name: name,
-            phone : phone ? phone : el.phone,
-          }
-
-          // if exist just update
-          this.clientService.updateClient(client.id,client)
-              .then(res => {
-                client = res
-                this.bookingService.saveBooking(booking,client);
-              }).catch(err => {
-                this.errorMessage = $.extend({}, this.errorMessage, err.error);
-                // console.log(this.errorMessage);
-              })
-        }
-      })
-        
-      if ( create === true ) {
-        client.name = name;
-        client.email = email;
-        client.phone = phone;
-        this.clientService.createNewClient(client)
-          .then(res => {
-            client = res;
-            this.bookingService.saveBooking(booking, client);
-          }).catch(err => {
-            this.errorMessage = $.extend({}, this.errorMessage, err.error);
-          })
+    this.isLoad = this.bookingService.isLoad
+    this.bookingService.submitBook(form).then(
+      res => {
+        this.errorMessage = res;
       }
-    }else {
-      client.name = name;
-      client.email = email;
-      client.phone = phone;
-      this.clientService.createNewClient(client)
-        .then(res => {
-          client = res;
-          console.log(res)
-          this.bookingService.saveBooking(booking, client);
-        }).catch(err => {
-          this.errorMessage = $.extend({}, this.errorMessage, err.error);
-        })
-    }
-
-    // (async () => {
-    //   var booking :any = {};
-    //   booking.arrival_date_hour = arrival_date_hour;
-    //   booking.departure_date_hour = departure_date_hour;
-    //   booking.note = note;
-    //   booking.guests = guests;
-    //   booking.client =  await host + '/clients/'+ client.id +'/'
-    //   booking.chambre = [host + '/rooms/' + idchambre + '/']
-    //   this.bookingService.createNewBooking(booking)
-    //     .then(res => {
-    //       booking = res
-    //       this.toast.success("La reservation est bien réçu !","Confirmation")
-    //       this.router.navigate([""])
-    //     }).catch(err => {
-    //       this.toast.error("Une erreur est survenue, veuillez faire une nouvelle reservation !")
-    //       this.errorMessage = $.extend({}, this.errorMessage, err.error);
-          
-    //     })
-
-    // })();
+    );
   }
 
-  
+  ngOnDestroy() {
+    this.category$.unsubscribe();
+    this.client$.unsubscribe();
+    this.isLoad$.unsubscribe();
+  }
 
 }

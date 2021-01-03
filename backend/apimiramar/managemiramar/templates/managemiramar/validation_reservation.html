@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <title>{{title}}</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Bonjour {{booking.client}}</h2>
+    <p>Vous venez de faire une reservation chez Hotel Miramar, dont voici les details! </p>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Reservation</th>
+            <th scope="col">Chambre</th>
+            <th scope="col">Client</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>No: {{booking.id}}</td>
+            <td>{{booking.chambre}}</td>
+            <td>Nom: {{booking.client.nam}}</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Arrivée : {{booking.arrival_date_hour}}</td>
+            <td>{{booking.chambre}}</td>
+            <td>Phone: {{booking.client.phone}}</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td >Départ :{{booking.departure_date_hour}}</td>
+            <td></td>
+            <td>Email: {{booking.client.email}}</td>
+          </tr>
+          <tr>
+            <th scope="row">4</th>
+            <td >Places :{{booking.guest}}</td>
+            <td></td>
+            <td>Prix: {{booking.chambre}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    <a href="" target="_blank" class="btn btn-outline-primary">Je valide</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+</body>
+</html>

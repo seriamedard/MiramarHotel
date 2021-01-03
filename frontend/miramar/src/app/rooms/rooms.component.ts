@@ -1,7 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
 import { CategoryService } from '../services/category.service';
 import { MainstartService } from '../services/mainstart.service';
+import { ReloadService } from '../services/reload.service';
 import { RoomService } from '../services/room.service';
 
 
@@ -10,8 +12,10 @@ import { RoomService } from '../services/room.service';
   templateUrl: './rooms.component.html',
   styleUrls: ['./rooms.component.scss']
 })
-export class RoomsComponent implements OnInit {
+export class RoomsComponent implements OnInit, OnDestroy {
 
+  roomSubscription : Subscription;
+  categorySubscription: Subscription;
   rooms: any[];
   name: "";
   categories: any[];
@@ -20,29 +24,39 @@ export class RoomsComponent implements OnInit {
   constructor(private title: Title,
               private startService: MainstartService,
               private roomService: RoomService,
-              private catService: CategoryService) {
+              private catService: CategoryService,
+              private reloadService: ReloadService) {
     this.title.setTitle("Miramar - Chambres")
    }
 
   ngOnInit(): void {
     this.loading = true;
+    setTimeout(() => this.reloadService.reload(),50)
     this.startService.onStarted();
     this.getAllRooms();
     this.getCategories();
   }
 
   getAllRooms() {
-    this.roomService.getAllRooms()
-      .then(res => {
-        this.rooms = res;
-        this.loading = false;
-      })
+    this.roomSubscription = this.roomService.roomSubject
+        .subscribe(res => {
+          this.rooms = res;
+        },(err)=> {
+          console.log(err)
+        })
+    this.roomService.emitNextRoomSubject();
   }
 
   getCategories() {
-    this.catService.getListCategory()
-      .then(res => {
+    this.categorySubscription = this.catService.categorySubject
+      .subscribe(res => {
         this.categories = res;
-      }).catch(err => {})
+      },(err) => {})
+    this.catService.emitNextSubjet();
+  }
+
+  ngOnDestroy() {
+    this.roomSubscription.unsubscribe()
+    this.categorySubscription.unsubscribe();
   }
 }

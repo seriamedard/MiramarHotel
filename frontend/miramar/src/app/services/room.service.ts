@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 
@@ -11,25 +11,28 @@ const host =  environment.host;
 })
 export class RoomService {
   roomSubject = new Subject<any[]>();
-  private rooms: any[];
+  rooms: any[] = [];
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+    this.getAllRooms();
+   }
 
-  emitRoomSubject( ) {
-    this.roomSubject.next(this.rooms.slice())
+  emitNextRoomSubject( ) {
+    this.roomSubject.next(this.rooms)
   }
 
-  getAllRooms(): Promise<any[]>{
-    return new Promise((resolve, reject) => {
+
+  getAllRooms(){
       this.httpClient.get<any[]>(host + '/rooms/')
         .subscribe(
           (res) => {
-            resolve(res)
+            this.rooms = res;
+            this.emitNextRoomSubject()
           },(err) => {
-            reject(err)
+            console.log(err)
           }
         )
-    })
+      
   }
 
   getRoomDetail(id: number) {
@@ -41,26 +44,26 @@ export class RoomService {
           )
     })
   }
+
   getRoomPromo() {
       var roomFilter;
       function getRandomInt(max) {
         return Math.floor(Math.random()*Math.floor(max))
-      }
-      return new Promise<any>((resolve, reject) => {
-        this.getAllRooms()
-        .then(rooms => {
-          roomFilter = rooms.filter( el => el.promo == true)
+      }  
+      return new Promise<any>((resolve, reject) => {     
           var aleanum : number;
-          try {
-            aleanum = getRandomInt(roomFilter.length);
-            resolve(roomFilter[aleanum])
-            
-          } catch (error) {
-            
-          }
-         
-        }).catch(err => {})
-      })
+          this.roomSubject.subscribe(
+            res => {
+                roomFilter = res.filter( el => el.promo == true)
+                try {
+                  aleanum = getRandomInt(roomFilter.length);
+                  resolve(roomFilter[aleanum])
+                } catch (error) {
+                }
+              }
+            )
+
+        })
       
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit} from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { CountryISO, SearchCountryField, TooltipLabel } from 'ngx-intl-tel-input';
 import { MainstartService } from '../services/mainstart.service';
@@ -11,6 +11,8 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { CategoryService } from '../services/category.service';
+import { ReloadService } from '../services/reload.service';
+import { Subscription } from 'rxjs';
 
 const host = environment.host;
 declare var $:any;
@@ -19,20 +21,26 @@ declare var $:any;
   templateUrl: './booknow.component.html',
   styleUrls: ['./booknow.component.scss']
 })
-export class BooknowComponent implements OnInit {
+export class BooknowComponent implements OnInit, OnDestroy {
 
   myPhone = "phone"
   separateDialCode = true;
 	SearchCountryField = SearchCountryField;
 	TooltipLabel = TooltipLabel;
   CountryISO = CountryISO;
+  CountryCode: string;
   preferredCountries: CountryISO[] = [CountryISO.Chad, CountryISO.Senegal];
 
+  room$ : Subscription;
+  category$: Subscription;
+  client$: Subscription;
   clients : any[] = [];
   rooms: any[] = [];
   categories: any;
   roomPromo: any;
   errorMessage : any;
+  isLoad = false;
+  isLoad$: Subscription;
 
   constructor(private startService: MainstartService,
               private title: Title,
@@ -41,110 +49,77 @@ export class BooknowComponent implements OnInit {
               private bookingService: BookingService,
               private catService: CategoryService,
               private toast : ToastrService,
-              private router: Router) {
-      this.title.setTitle("Miramar - Reservation"); 
+              private router: Router,
+              private reloadService: ReloadService) {
+                
+      this.title.setTitle("Miramar Hotel Reservation"); 
 
     }
 
   ngOnInit(): void {
-    this.clientService.getAllClient()
-        .then((res:any) => {
-          this.clients = res;
-    });
-    
-    this.roomService.getAllRooms()
-    .then(res => {
-      this.rooms = res;
-    });
+    this.roomService.getAllRooms(); // Load All Rooms
+    this.catService.getListCategory(); // Load All Categories
+    this.clientService.getAllClient(); // Load all clients
+
+    this.isLoad$ = this.bookingService.isLoadSub
+        .subscribe(res => {
+          this.isLoad = res
+        })
+
+    this.client$ = this.clientService.ClientSubject
+      .subscribe(res => {        
+        this.clients = res
+      })
+
+    setTimeout(() => this.reloadService.reload(),100)
+
+    this.geoIp();
+
+    this.room$ = this.roomService.roomSubject
+      .subscribe(res => {
+        this.rooms = res
+      })
 
     this.roomService.getRoomPromo()
       .then(res => this.roomPromo=res)
+
     this.getCategories();
+
+  }
+
+  async geoIp(){
+    this.reloadService.getIpInfo().subscribe(
+      (resp:any) => {
+        var countryCode = (resp && resp.country) ? resp.country : "us";
+        this.CountryCode = countryCode
+      }
+    )
 
   }
 
   
   getCategories() {
-    this.catService.getListCategory()
-      .then(res => {
-        this.categories = res;
-      }).catch(err => console.log(err))
+   this.category$ = this.catService.categorySubject
+    .subscribe(res => {
+      this.categories = res;
+    })
   }
   
   onSubmitBook(form: NgForm) {
-
-    const arrival_date_hour = form.value['arrival_date_hour'];
-    const departure_date_hour = form.value['departure_date_hour']
-    const note = form.value['note'];
-    const guests = parseInt(form.value['guests'],10);
-    const name = form.value['name'];
-    const phone = form.value['phone'].internationalNumber;
-    const email = form.value['email'];
-    const idchambre =parseInt(form.value['chambre'],10);
-    var client: any;
-    client = {};
-    var booking :any = {};
-      booking.arrival_date_hour = arrival_date_hour;
-      booking.departure_date_hour = departure_date_hour;
-      booking.note = note;
-      booking.guests = guests;
-      booking.chambre = [host + '/rooms/' + idchambre + '/']
-    // Filter by email
-    var create= true;
-
-    //reload clients
-    this.clientService.getAllClient()
-        .then((res:any) => {
-          this.clients = res;
-    });
-
-    if (this.clients ) {
-      this.clients.forEach(el => {
-        if (el.email === email) {
-          create = false;
-          client = el;
-          client = {
-            ...el,
-            name: name,
-            phone : phone ? phone : el.phone,
-          }
-
-          // if exist just update
-          this.clientService.updateClient(client.id,client)
-              .then(res => {
-                client = res
-                this.bookingService.saveBooking(booking, client);
-              }).catch(err => {
-                this.errorMessage = $.extend({}, this.errorMessage, err.error);
-                // console.log(this.errorMessage);
-              })
-        }
-      })
-        
-      if ( create === true ) {
-        client.name = name;
-        client.email = email;
-        client.phone = phone;
-        this.clientService.createNewClient(client)
-          .then(res => {
-            client = res;
-            this.bookingService.saveBooking(booking, client);
-          }).catch(err => {
-            this.errorMessage = $.extend({}, this.errorMessage, err.error);
-          })
+    this.isLoad = this.bookingService.isLoad
+    this.bookingService.submitBook(form).then(
+      res => {
+        this.errorMessage = res
       }
-    }else {
-      client.name = name;
-      client.email = email;
-      client.phone = phone;
-      this.clientService.createNewClient(client)
-        .then(res => {
-          client = res;
-          this.bookingService.saveBooking(booking,client);
-        }).catch(err => {
-          this.errorMessage = $.extend({}, this.errorMessage, err.error);
-        })
-    }
+    );
   }
+
+  ngOnDestroy() {
+    this.client$.unsubscribe();
+    // this.room$.unsubscribe();
+    this.category$.unsubscribe();
+    this.isLoad$.unsubscribe();
+  }
+  
 
 }
