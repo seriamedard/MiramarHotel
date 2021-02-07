@@ -113,11 +113,13 @@ class Client(Personne):
 
 class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    arrival_date_hour = models.DateTimeField("Temps d'arrivée",auto_now_add=False, null=True)
-    departure_date_hour = models.DateTimeField("Temps de départ",auto_now_add=False, null=True)
+    arrival_date_hour = models.DateTimeField("Temps d'arrivée",auto_now_add=False)
+    departure_date_hour = models.DateTimeField("Temps de départ",auto_now_add=False)
     note =models.TextField("Message",max_length=300, blank=True, default="")
     termined = models.BooleanField("Terminé", default=False)
+    confirmed = models.BooleanField("Confirmé",default=False)
     guests = PositiveIntegerField("Occupants",default=1)
+    price = PositiveIntegerField("Prix", blank=True,null=True)
     client = models.ForeignKey(Client, models.SET_NULL, null=True)
     chambre = models.ManyToManyField(Room)
 
@@ -128,7 +130,7 @@ class Booking(models.Model):
         return f"Commande No: {self.id}"
 
 
-
+"""
 #Validation by sms
 @receiver(post_save, sender=Booking)
 def validation_by_sms(sender, instance, **kwargs):
@@ -146,30 +148,31 @@ def validation_by_sms(sender, instance, **kwargs):
                         )
     except TwilioRestException as err:
         print(err)
+"""
 
-@receiver(post_save, sender=Booking)
-def validation_email(sender, instance,**kwargs):
-    email = instance.client.email
-    context = {
-        "booking": instance,
-        "title": "Confirmation de la réservation"
-    }
-    if email:
-        envoie_mail(request,email,"validation de la reservation",context)
+# @receiver(post_save, sender=Booking)
+# def validation_email(sender, instance,**kwargs):
+#     email = instance.client.email
+#     context = {
+#         "booking": instance,
+#         "title": "Confirmation de la réservation"
+#     }
+#     if email:
+#         envoie_mail(request,email,"validation de la reservation",context)
 
 # Email
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.utils.html import strip_tags
-def envoie_mail(request, email, sujet, context):
-    template = render_to_string('managemiramar/validation_reservation.html', context)
-    text_content = strip_tags(template)
-    email = EmailMultiAlternatives(
-        sujet,
-        text_content,
-        settings.EMAIL_HOST_USER,
-        [f'{email}']
-        )
-    email.attach_alternative(template, "text/html")
-    email.send(fail_silently=False)
+# def envoie_mail(request, email, sujet, context):
+#     template = render_to_string('managemiramar/validation_reservation.html', context)
+#     text_content = strip_tags(template)
+#     email = EmailMultiAlternatives(
+#         sujet,
+#         text_content,
+#         settings.EMAIL_HOST_USER,
+#         [f'{email}']
+#         )
+#     email.attach_alternative(template, "text/html")
+#     email.send(fail_silently=False)

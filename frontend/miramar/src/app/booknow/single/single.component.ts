@@ -67,9 +67,11 @@ export class SingleComponent implements OnInit, OnDestroy {
         this.clients = res
       })
 
-    setTimeout(() => this.reloadService.reload(),100)
+    setTimeout(() => {
+      this.reloadService.reload()
+      this.startService.onStarted();
+    },100)
 
-    this.startService.onStarted();
 
     var id;
     id=parseInt(this.route.snapshot.params['id'],10)

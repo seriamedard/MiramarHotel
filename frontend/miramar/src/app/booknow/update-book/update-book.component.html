@@ -18,48 +18,49 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6">
-          <h2 class="mb-5">Formulaire de Reservation</h2>
-              <form (ngSubmit)="onSubmitBook(f)" #f="ngForm">
+          <h2 class="mb-5">Modifier la Reservation</h2>
+              <form [formGroup]="bookGroup">
                 <div class="row">
-                  <div class="col-sm-6 form-group"> 
-                    <label for="">Date d'Arrivée</label>
-                    <p *ngIf="errorMessage && errorMessage.arrival_date_hour" style="color: rgb(255, 145, 0); font-size: x-small;">{{errorMessage.arrival_date_hour}}</p>
-                    <div style="position: relative;" class="datetimepicker" id='arrival_date' data-target-input="nearest">
-                      <span class="fa fa-calendar icon" style="position: absolute; right: 10px; top: 10px;"></span>
-                      <input name="arrival_date_hour" type='text' class="form-control datetimepicker-input" data-target="#arrival_date" data-toggle="datetimepicker" autocomplete="off"  ngModel/>
-                    </div>
+                    <div class="col-sm-6 form-group"> 
+                        <label for="">Date d'Arrivée</label>
+                        <p *ngIf="errorMessage && errorMessage.arrival_date_hour" style="color: rgb(255, 145, 0); font-size: x-small;">{{errorMessage.arrival_date_hour}}</p>
+                        <div style="position: relative;" class="datetimepicker" id='arrival_date' data-target-input="nearest">
+                          <span class="fa fa-calendar icon" style="position: absolute; right: 10px; top: 10px;"></span>
+                          <input  type='text' class="form-control datetimepicker-input" data-target="#arrival_date" data-toggle="datetimepicker" formControlName="arrival_date_hour"/>
+                        </div>
 
-                </div> 
-                
-    
-                <div class="col-sm-6 form-group">
-    
-                    <label for="">Date de Depart</label>
-                    <p *ngIf="errorMessage && errorMessage.departure_date_hour" style="color: rgb(255, 145, 0);font-size: x-small;">{{errorMessage.departure_date_hour}}</p>
-                    <div style="position: relative;" class="datetimepicker" id='departure_date' data-target-input="nearest">
-                      <span class="fa fa-calendar icon" style="position: absolute; right: 10px; top: 10px;"></span>
-                      <input name="departure_date_hour" type='text' class="form-control datetimepicker-input" data-target="#departure_date" data-toggle="datetimepicker" autocomplete="off" ngModel/>
+                    </div> 
+                    
+        
+                    <div class="col-sm-6 form-group">
+        
+                        <label for="">Date de Depart</label>
+                        <p *ngIf="errorMessage && errorMessage.departure_date_hour" style="color: rgb(255, 145, 0);font-size: x-small;">{{errorMessage.departure_date_hour}}</p>
+                        <div style="position: relative;" class="datetimepicker" id='departure_date' data-target-input="nearest">
+                          <span class="fa fa-calendar icon" style="position: absolute; right: 10px; top: 10px;"></span>
+                          <input formControlName="departure_date_hour" type='text' class="form-control datetimepicker-input" data-target="#departure_date" data-toggle="datetimepicker"/>
+                        </div>
+                        
                     </div>
                     
                 </div>
-                
-            </div>
+
                 <div class="row">
                   <div class="col-md-6 form-group">
                     <label for="room">Chambre</label>
-                    <p *ngIf="errorMessage && errorMessage.chambre" style="color: rgb(255, 145, 0); font-size:small">{{errorMessage.chambre[0]}}</p>
-                    <select name="chambre" id="room" class="form-control" title="Choisir une chambre" ngModel>
-                      <option value="" disabled>selectionner la chambre</option>
-                      <option value="{{room.id}}">{{room.name}} - ({{room.price}}€)</option>
+                    <p *ngIf="errorMessage && errorMessage.chambre" style="color: rgb(255, 145, 0); font-size:small">Choisir correctement !</p>
+                    <select data-bs-spy="scroll" formControlName='room' id="room" class="form-control" title="Choisir une chambre">
+                      <option value="" disabled>Choisir une chambre</option>
+                      <option *ngFor="let room of rooms; let i=index" value="{{room.id}}" >{{room.name}} -({{room.price}}€)</option>
                     </select>
                   </div>
 
                   <div class="col-md-6 form-group" >
                     <label for="room">Personnes</label>
                     <p *ngIf="errorMessage && errorMessage.guests" style="color: rgb(255, 145, 0); font-size:small">{{errorMessage.guests[0]}}</p>
-                    <select name="guests" id="room" class="form-control" ngModel required>
-                      <option value="" disabled>pour combien ?</option>
-                      <option value="1" >1 personne</option>
+                    <select data-bs-spy="scroll" formControlName='guests' id="room" class="form-control">
+                      <option value="" disabled>Nombre de personnes</option>
+                      <option  value="1" selected>1 personne</option>
                       <option value="2">2 personnes</option>
                       <option value="3">3 personnes</option>
                       <option value="4">4 personnes</option>
@@ -71,14 +72,14 @@
                   <div class="col-md-12 form-group">
                     <label for="name">Nom</label>
                     <p *ngIf="errorMessage && errorMessage.name" style="color: rgb(255, 145, 0); font-size:small">{{errorMessage.name[0]}}</p>
-                    <input name="name" type="text" id="name" class="form-control " ngModel required>
+                    <input  type="text" id="name" class="form-control " formControlName='name'>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-12 form-group">
                     <label for="email">Email</label>
                     <p *ngIf="errorMessage && errorMessage.email" style="color: rgb(255, 145, 0); font-size:small">{{errorMessage.email[0]}}</p>
-                    <input name="email" type="email" id="email" class="form-control " ngModel required>
+                    <input name="email" type="email" id="email" class="form-control " formControlName='email'>
                   </div>
                 </div>
                 <div class="row">
@@ -90,15 +91,17 @@
                 [cssClass]="'custom'"
                 [preferredCountries]="preferredCountries"
                 [enableAutoCountrySelect]="true"
+                [selectedCountryISO]="CountryCode"
                 [enablePlaceholder]="true"
                 [searchCountryFlag]="true"
                 [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
                 [selectFirstCountry]="false"
-                [selectedCountryISO]="CountryCode"
+                
                 [tooltipField]="TooltipLabel.Name"
                 [phoneValidation]="true"
+                initialCountry="auto"
                 [separateDialCode]="separateDialCode"
-                name="phone" ngModel required>
+                formControlName='phone'>
               </ngx-intl-tel-input>
                   </div>
                 </div>
@@ -107,14 +110,14 @@
                   <div class="col-md-12 form-group">
                     <label for="message">Ecrire une Note (optionnel)</label>
                     <p *ngIf="errorMessage && errorMessage.note" style="color: rgb(255, 145, 0);">{{errorMessage.note[0]}}</p>
-                    <textarea name="note" id="message" class="form-control " cols="30" rows="8" ngModel></textarea>
+                    <textarea formControlName='note' id="message" class="form-control " cols="30" rows="8"></textarea>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6 form-group">
-                    <button class="btn btn-primary custom__btn" type="submit" [disabled]="f.invalid">
+                    <button class="btn btn-primary custom__btn" type="submit">
                       <span [hidden]="!isLoad"  class="load-container reserve-load" role="status" aria-hidden="true"></span>
-                      <span>Je Reserve</span>
+                      <span>Envoyer</span>
                     </button>
                   </div>
                 </div>
@@ -134,22 +137,21 @@
                   <span class="ion-ios-star"></span>
                   <span class="ion-ios-star"></span>
                 </span>
+                  
                 </span>
               </div>
             </figure>
             <div class="media-body">
               <h3 class="mt-0"><a href="#">{{roomPromo.name}}</a></h3>
               <ul class="room-specs">
-                <li><span class="ion-ios-people-outline"></span> {{roomPromo.max_places}} personnes</li>
+                <li><span class="ion-ios-people-outline"></span> {{roomPromo.guests}} personnes</li>
                 <li><span class="ion-ios-crop"></span> {{roomPromo.surface}} m <sup>2</sup></li>
               </ul>
               <p>Nulla vel metus scelerisque ante sollicitudin. Fusce condimentum nunc ac nisi vulputate fringilla. </p>
-              <p><a href="/reservation/{{roomPromo.id}}" class="btn btn-primary btn-sm">Reserver pour {{roomPromo.price}}€</a></p>
+              <p><a routerLink="/reservation/{{roomPromo.id}}" class="btn btn-primary btn-sm">Reserver pour {{roomPromo.price}}€</a></p>
             </div>
           </div>
-          </div>
+        </div>
       </div>
     </div>
   </section>
-  <!-- END section -->
-  <app-holiday></app-holiday>

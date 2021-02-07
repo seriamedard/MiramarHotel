@@ -27,7 +27,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
-        fields = ['url','id','created_at','name',
+        fields = ['id','url','created_at','name',
                     'photo','max_places',
                     'surface','price','description',
                     'available','promo','category']
@@ -81,39 +81,14 @@ class ContactUsSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-class ClientSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Client
-        fields = '__all__'
-
-    def create(self, validated_data):
-        """
-        Create an return a new Category instance
-        """
-        return Client.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        """
-        Update an return an existing Client instance
-        """
-        instance.name = validated_data.get('name')
-        instance.last_name = validated_data.get('last_name')
-        instance.email = validated_data.get('email')
-        instance.phone = validated_data.get('phone')
-        instance.photo = validated_data.get('photo')
-        instance.note = validated_data.get('note')
-        instance.save()
-        return instance
-
 
 class BookingSerializer(serializers.ModelSerializer):
-    client = serializers.HyperlinkedRelatedField(
-        many=False,
-        read_only=False,
-        view_name='client-detail',
-        queryset = Client.objects.all()
-    )
+    # client = serializers.HyperlinkedRelatedField(
+    #     many=False,
+    #     read_only=False,
+    #     view_name='client-detail',
+    #     queryset = Client.objects.all()
+    # )
     chambre = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=False,
@@ -122,7 +97,7 @@ class BookingSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Booking
-        fields = ['url','arrival_date_hour',
+        fields = ['id','url','arrival_date_hour',
                     'departure_date_hour','note','termined',
                     'guests','client','chambre'
                     ]
@@ -152,3 +127,27 @@ class BookingSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = ['id','created_at','name','email','phone','last_name','photo']
+
+    def create(self, validated_data):
+        """
+        Create an return a new Category instance
+        """
+        return Client.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        """
+        Update an return an existing Client instance
+        """
+        instance.name = validated_data.get('name')
+        instance.last_name = validated_data.get('last_name')
+        instance.email = validated_data.get('email')
+        instance.phone = validated_data.get('phone')
+        instance.photo = validated_data.get('photo')
+        instance.note = validated_data.get('note')
+        instance.save()
+        return instance

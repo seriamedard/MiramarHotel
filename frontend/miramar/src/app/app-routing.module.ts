@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AboutComponent } from './about/about.component';
 import { BooknowComponent } from './booknow/booknow.component';
 import { SingleComponent } from './booknow/single/single.component';
+import { UpdateBookComponent } from './booknow/update-book/update-book.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { EventsComponent } from './events/events.component';
 import { HomeComponent } from './home/home.component';
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: "contactez-nous", component: ContactUsComponent},
   {path: 'reservation', component: BooknowComponent},
   {path: 'reservation/:id', component: SingleComponent},
+  {path: 'modifier-reservation', component: UpdateBookComponent},
 ];
 
 @NgModule({

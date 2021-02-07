@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -12,24 +12,39 @@ const host =  environment.host;
 export class RoomService {
   roomSubject = new Subject<any[]>();
   rooms: any[] = [];
-
+  isLoad: boolean = false;
+  isLoadSubject = new Subject<boolean>();
   constructor(private httpClient: HttpClient) {
     this.getAllRooms();
    }
 
   emitNextRoomSubject( ) {
-    this.roomSubject.next(this.rooms)
+    this.roomSubject.next(this.rooms);
+  }
+
+  emitLoading() {
+    this.isLoadSubject.next(this.isLoad);
   }
 
 
   getAllRooms(){
-      this.httpClient.get<any[]>(host + '/rooms/')
-        .subscribe(
-          (res) => {
-            this.rooms = res;
-            this.emitNextRoomSubject()
-          },(err) => {
-            console.log(err)
+      const req = new HttpRequest(
+        "GET", host + '/rooms/',{reportProgress:true}
+      )
+      this.httpClient.request(req)
+        .subscribe((res:any) => {
+          if(res.type == 1) {
+            this.isLoad = true
+            this.emitLoading()
+          }else if(res.type == 4) {
+            this.isLoad = false;
+            this.rooms = res.body;
+            this.emitLoading();
+            this.emitNextRoomSubject();       
+          }
+        }
+        ,(err) => {
+            
           }
         )
       

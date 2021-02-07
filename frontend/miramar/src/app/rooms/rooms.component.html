@@ -17,7 +17,9 @@
 
   <section class="site-section">
     <div class="container">
-      <mat-spinner *ngIf="loading"></mat-spinner>
+      <div [hidden]="!loading" class="load-container two">
+        <div class="loader">Loading...</div>
+      </div>
       <div class="row" *ngIf="rooms">
         <div class="col-md-4 mb-4" *ngFor="let room of rooms | paginate: {itemsPerPage: 6, currentPage: p }">
           <div class="media d-block room mb-0">
@@ -48,7 +50,8 @@
         </div>
         
       </div>
-      <pagination-controls style="text-align:center;" (pageChange)="p = $event" ></pagination-controls>
+    
+      <pagination-controls *ngIf="rooms.length>=1" style="text-align:center;" (pageChange)="p = $event" ></pagination-controls>
     </div>
   </section>
 

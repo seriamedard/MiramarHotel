@@ -33,6 +33,7 @@ import { MatInputModule } from '@angular/material/input';
 import { SafePipe } from './pipe/safe.pipe';
 import { SingleComponent } from './booknow/single/single.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { UpdateBookComponent } from './booknow/update-book/update-book.component';
 
 
 
@@ -54,6 +55,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     OneblogComponent,
     SafePipe,
     SingleComponent,
+    UpdateBookComponent,
   ],
   imports: [
     BrowserModule,

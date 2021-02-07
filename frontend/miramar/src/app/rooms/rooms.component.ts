@@ -19,7 +19,8 @@ export class RoomsComponent implements OnInit, OnDestroy {
   rooms: any[];
   name: "";
   categories: any[];
-  loading : boolean;
+  loading : boolean = true;
+  isload$: Subscription;
   p:number = 1;
   constructor(private title: Title,
               private startService: MainstartService,
@@ -30,7 +31,6 @@ export class RoomsComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit(): void {
-    this.loading = true;
     setTimeout(() => this.reloadService.reload(),50)
     this.startService.onStarted();
     this.getAllRooms();
@@ -38,9 +38,16 @@ export class RoomsComponent implements OnInit, OnDestroy {
   }
 
   getAllRooms() {
+   this.isload$ = this.roomService.isLoadSubject.subscribe(
+      res => {
+        this.loading = res;
+      }
+    )
+
     this.roomSubscription = this.roomService.roomSubject
         .subscribe(res => {
           this.rooms = res;
+          this.loading = false;
         },(err)=> {
           console.log(err)
         })
@@ -56,6 +63,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.isload$.unsubscribe();
     this.roomSubscription.unsubscribe()
     this.categorySubscription.unsubscribe();
   }

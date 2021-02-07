@@ -41,6 +41,9 @@ export class BooknowComponent implements OnInit, OnDestroy {
   errorMessage : any;
   isLoad = false;
   isLoad$: Subscription;
+  bookingUpdate: any = {};
+  bookingUpdate$: Subscription;
+  clt:any = {};
 
   constructor(private startService: MainstartService,
               private title: Title,
@@ -66,12 +69,21 @@ export class BooknowComponent implements OnInit, OnDestroy {
           this.isLoad = res
         })
 
+    this.bookingUpdate$ = this.bookingService.bookingUpdateSub
+        .subscribe(res => {
+          this.bookingUpdate = res
+          this.clientDetail(res.client);
+        })
+
     this.client$ = this.clientService.ClientSubject
       .subscribe(res => {        
         this.clients = res
       })
 
-    setTimeout(() => this.reloadService.reload(),100)
+    setTimeout(() => {
+      this.reloadService.reload();
+      this.startService.onStarted();
+    },100)
 
     this.geoIp();
 
@@ -84,7 +96,8 @@ export class BooknowComponent implements OnInit, OnDestroy {
       .then(res => this.roomPromo=res)
 
     this.getCategories();
-
+    
+    
   }
 
   async geoIp(){
@@ -114,11 +127,25 @@ export class BooknowComponent implements OnInit, OnDestroy {
     );
   }
 
+  onClickUpdate() {
+    this.router.navigate(["/modifier-reservation"]);
+    (<any>$('#exampleModal')).modal({
+    }).hide();
+  }
+
+  clientDetail(id:number):any {
+      this.clientService.getOnClient(id)
+      .then(res => {
+        this.clt = res
+      })
+  }
+
   ngOnDestroy() {
     this.client$.unsubscribe();
     // this.room$.unsubscribe();
     this.category$.unsubscribe();
     this.isLoad$.unsubscribe();
+    this.bookingUpdate$.unsubscribe();
   }
   
 

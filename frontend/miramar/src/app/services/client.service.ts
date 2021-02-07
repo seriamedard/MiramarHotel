@@ -42,4 +42,12 @@ export class ClientService {
           .subscribe(res => resolve(res), err => reject(err))
     })
   }
+
+  getOnClient(id:number) {
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(host + '/clients/' + id + '/')
+        .subscribe(res => resolve(res),err => reject(err))
+    })
+    
+  }
 }

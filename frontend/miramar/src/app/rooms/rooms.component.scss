@@ -1,3 +1,80 @@
 .ngx-pagination li.current {
     background-color:#b99365;
 }
+
+.load-container {
+    position:relative;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    width:100px;
+    height:100px;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+    border:1px solid rgba(255,255,255,0.4);
+    overflow:hidden;
+    letter-spacing:normal;
+  }
+
+  .two .loader,
+  .two .loader:before,
+  .two .loader:after {
+    border-radius: 50%;
+  }
+  .two .loader:before,
+  .two .loader:after {
+    position: absolute;
+    content: '';
+    background-color: #fff;  /* 円内の背景色 */
+  }
+  .two .loader:before {
+    width: 5.2em;
+    height: 8.2em;
+    border-radius: 8.2em 0 0 8.2em;
+    top: -0.1em;
+    left: -0.1em;
+    -webkit-transform-origin: 4.2em 4.1em;
+    transform-origin: 4.2em 4.1em;
+    -webkit-animation: load2 2s infinite ease 1.5s;
+    animation: load2 2s infinite ease 1.5s;
+  }
+  .two .loader {
+    font-size: 11px;
+    text-indent: -99999em;
+    margin: 2em auto;
+    position: relative;
+    width: 8em;
+    height: 8em;
+    box-shadow: inset 0 0 0 1em #b99365;
+  }
+  .two .loader:after {
+    width: 5.2em;
+    height: 8.2em;
+    border-radius: 0 8.2em 8.2em 0;
+    top: -0.1em;
+    left: 4.1em;
+    -webkit-transform-origin: 0px 4.1em;
+    transform-origin: 0px 4.1em;
+    -webkit-animation: load2 2s infinite ease;
+    animation: load2 2s infinite ease;
+  }
+  @-webkit-keyframes load2 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes load2 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }

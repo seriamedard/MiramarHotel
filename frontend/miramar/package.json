@@ -45,6 +45,7 @@
     "jquery.stellar": "^0.6.2",
     "js-cookie": "^2.2.1",
     "magnific-popup": "^1.1.0",
+    "micromodal": "^0.4.6",
     "moment": "^2.29.1",
     "ngx-bootstrap": "^6.2.0",
     "ngx-datetime-picker": "^3.0.0",
@@ -55,6 +56,7 @@
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
     "rxjs-compat": "^6.6.3",
+    "tempusdominus-bootstrap-4": "^5.39.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },

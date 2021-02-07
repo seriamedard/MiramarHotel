@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
+import MicroModal from 'micromodal';
 import * as moment from 'moment';
-import { from } from 'rxjs';
-import { intlTelInput } from 'intl-tel-input';
-declare var Pidie: any;
+
 declare var jQuery: any;
 declare var $: any;
 declare var google: any; 
@@ -18,6 +17,9 @@ export class MainstartService {
 
   public onStarted() {
     (function($) {
+      
+      
+
       
       // bootstrap dropdown hover
     
@@ -222,35 +224,43 @@ export class MainstartService {
         }
       });
 
-      
       var defaults = {
-        showClear: true,
-        showClose: true,
         useCurrent: true,
+        showTodayButton: true,
         keepOpen: true,
         ignoreReadonly: true,
-        minDate: new Date(),
-        toolbarPlacement: 'top',
+        toolbarPlacement: 'bottom',
         locale: moment.locale(),
-        icons: {
-          time: 'fa fa-clock-o',
-          date: 'fa fa-calendar',
-          up: 'fa fa-angle-up',
-          down: 'fa fa-angle-down',
-          previous: 'fa fa-angle-left',
-          next: 'fa fa-angle-right',
-          today: 'fa fa-dot-circle-o',
-          clear: 'fa fa-trash',
-          close: 'fa fa-times'
-        },
+        format:'YYYY-MM-DD hh:mm',
+        showClear: true,
+        showClose: true,
+        tooltips: {
+          prevMonth: 'Mois Précedent',
+          nextMonth: 'Mois Suivant',
+          time: "Selectionner l'heure"
+        }
       };
 
       (function() {
-        var optionsDatetime = $.extend({}, defaults, {format:'YYYY-MM-DDThh:mm'});
-        var optionsTime = $.extend({}, defaults, {format:'HH:mm'});
-        var optionsDate = $.extend({}, defaults, {format:'DD-MM-YYYY'});
-        $('#arrival_date, #departure_date').datetimepicker(optionsDatetime);
-        // $('#arrival_date, #departure_date').datetimepicker(optionsTime);
+        var optionsDatetimeArrival = $.extend({}, defaults, {
+          minDate: new Date(),
+          maxDate: $('#departure_date input').val() ? new Date($('#departure_date input').val()) : undefined,
+        });
+
+        var optionsDatetimeDeparture = $.extend({}, defaults, {
+          minDate: $('#arrival_date input').val() ? new Date($('#arrival_date input').val()) : new Date(),
+        });
+        
+        
+
+        $('#arrival_date').datetimepicker(
+          optionsDatetimeArrival
+        );
+        // $('#arrival_date').datetimepicker({})
+        $('#departure_date').datetimepicker(
+          optionsDatetimeDeparture
+        );
+        
       })();
     
       function initMap() {
